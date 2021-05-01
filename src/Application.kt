@@ -12,8 +12,20 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     routing {
-        get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
+        get("/respond-200") {
+            call.respond(HttpStatusCode.OK)
+        }
+
+        get("/status-200") {
+            call.response.status(HttpStatusCode.OK) // Mistake
+        }
+
+        get("/respond-404") {
+            call.respond(HttpStatusCode.NotFound)
+        }
+
+        get("/status-404") {
+            call.response.status(HttpStatusCode.NotFound) // Mistake
         }
     }
 }

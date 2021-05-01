@@ -10,11 +10,41 @@ import io.ktor.server.testing.*
 
 class ApplicationTest {
     @Test
-    fun testRoot() {
+    fun testRespond200() {
         withTestApplication({ module(testing = true) }) {
-            handleRequest(HttpMethod.Get, "/").apply {
+            handleRequest(HttpMethod.Get, "/respond-200").apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("HELLO WORLD!", response.content)
+                assertTrue(requestHandled, "requestHandled should be true")
+            }
+        }
+    }
+
+    @Test
+    fun testStatus200() {
+        withTestApplication({ module(testing = true) }) {
+            handleRequest(HttpMethod.Get, "/status-200").apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                assertFalse(requestHandled, "requestHandled should be false to detect mistake")
+            }
+        }
+    }
+
+    @Test
+    fun testRespond404() {
+        withTestApplication({ module(testing = true) }) {
+            handleRequest(HttpMethod.Get, "/respond-404").apply {
+                assertEquals(HttpStatusCode.NotFound, response.status())
+                assertTrue(requestHandled, "requestHandled should be true")
+            }
+        }
+    }
+
+    @Test
+    fun testStatus404() {
+        withTestApplication({ module(testing = true) }) {
+            handleRequest(HttpMethod.Get, "/status-404").apply {
+                assertEquals(HttpStatusCode.NotFound, response.status())
+                assertFalse(requestHandled, "requestHandled should be false to detect mistake")
             }
         }
     }
